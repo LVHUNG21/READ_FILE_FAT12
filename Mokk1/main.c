@@ -10,6 +10,7 @@ struct Directory_Entry {
   uint16_t start_cluster; /* Cluster where this directory entry starts */
   uint32_t file_size;     /* Size of the file in bytes */
 };
+printf("");
 
 void fileSystemManager(FILE *file, struct BootSector *bs, struct ListNode *head)
 {
