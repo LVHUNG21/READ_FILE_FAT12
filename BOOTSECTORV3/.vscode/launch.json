@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/84396/Documents/BOOTSECTORV3",
-      "program": "c:/Users/84396/Documents/BOOTSECTORV3/build/Debug/outDebug",
+      "cwd": "c:/Users/84396/Documents/READ_FILE_FAT12/BOOTSECTORV3",
+      "program": "c:/Users/84396/Documents/READ_FILE_FAT12/BOOTSECTORV3/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

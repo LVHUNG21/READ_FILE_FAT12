@@ -248,7 +248,7 @@ void readContentFromClusters(FILE *file, uint32_t startCluster, uint32_t fileSiz
         displayFileContent(buffer, bytesRead);
 
         fileSize -= bytesRead;
-        // offset += bytesRead;
+        offset += bytesRead;
 
         uint16_t fatEntry = fatentry(file, currentCluster);
 

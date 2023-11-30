@@ -1,13 +1,14 @@
+
 #include "FAT_Parse/BootSector/bootSector.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include "Display/Display.h" 
+#include "Display/Display.h"
 
-#include <windows.h> 
+#include <windows.h>
 
-FILE* file;
+FILE *file;
 
 int main()
 {
@@ -21,19 +22,13 @@ int main()
 
     file = fopen("floppy.img", "r+b");
 
-    if (file == NULL) {
+    if (file == NULL)
+    {
         perror("Error opening file");
         return 1;
     }
-
-
-    // int numEntries = 16;
     struct ListNode *head = NULL;
 
-    // readEntriesFromFile(file, 0x2600);
-
-    // printList(head);
-    printf("head:%x", head);
     fileSystemManager(file);
 
     struct ListNode *current = head;

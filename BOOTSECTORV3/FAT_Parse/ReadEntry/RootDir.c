@@ -1,11 +1,22 @@
+/******************************************************************************
+ * Include
+ *****************************************************************************/
 #include <stdio.h>
 #include <stdint.h>
 #include "RootDir.h"
+
+/******************************************************************************
+ * Prototype
+ *****************************************************************************/
 DirectoryEntry EntryTemp;
 FILE *file;
 DirectoryEntry *ArrayEntry;
 Root_Status ReadEntry(uint32_t PtrAddress);
 Root_Status CheckEntry(uint32_t PtrAddress);
+
+/******************************************************************************
+ * Funtion
+ *****************************************************************************/
 
 /* The function reads an entry at the position passed in */
 Root_Status ReadEntry(uint32_t PtrAddress)
@@ -267,3 +278,6 @@ DirectoryEntry *readEntriesFromFile(FILE *file, uint32_t offset, int *numEntries
 	/* Return the array of directory entries */
 	return entries;
 }
+/******************************************************************************
+ * EOF
+ *****************************************************************************/

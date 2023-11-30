@@ -13,6 +13,7 @@
 //     return file;
 // }
 struct BootSector bs;
+uint32_t rootAddress = 0;
 
 BootSector_Status calculateRootDirectoryAddress(uint32_t *rootDirAddress)
 {
@@ -34,16 +35,26 @@ BootSector_Status calculateRootDirectoryAddress(uint32_t *rootDirAddress)
 
 uint32_t dataoffset()
 {
-    uint32_t RootEntCnt = *(uint16_t *)bs.BPB_RootEntCnt;
-    uint32_t rootAdd = 0;
-    BootSector_Status status = calculateRootDirectoryAddress(&rootAdd);
+    if (rootAddress == 0)
+    {
+        calculateRootDirectoryAddress(&rootAddress);
+    }
 
-    return rootAdd+ (RootEntCnt * 32);
+    uint32_t RootEntCnt = getRootEntCnt();
+    uint32_t rootAdd = 0;
+
+    // BootSector_Status status = calculateRootDirectoryAddress(&rootAdd);
+    // printf("bootstatus:%d",status);
+    printf("%d", rootAdd);
+
+    return rootAddress + (RootEntCnt * 32);
 }
 uint32_t clusteroffset(uint16_t ncluster)
 {
+
     uint16_t SecPerClus = getSecPerClus(bs);
     uint16_t BytePerSec = *(uint16_t *)bs.BPB_BytsPerSec;
+    // printf("dataoffset:%d", dataoffset());
     return dataoffset() + ((ncluster - 2) * SecPerClus * BytePerSec);
 }
 
@@ -75,16 +86,6 @@ uint32_t fatoffset(uint32_t nfat)
     uint16_t sectorsPerFat = *((uint16_t *)bs.BPB_FATSz16);
     uint16_t reservedSectors = *((uint16_t *)bs.BPB_RsvdSecCnt);
     return bytesPerSector * ((nfat * sectorsPerFat) + reservedSectors);
-}
-
-BootSector_Status calculateFATAddress(uint32_t *fatAddress)
-{
-    uint32_t reservedSectors = *((uint16_t *)(bs.BPB_RsvdSecCnt));
-    uint32_t bytesPerSector = *((uint16_t *)(bs.BPB_BytsPerSec));
-
-    *fatAddress = reservedSectors * bytesPerSector;
-
-    return BOOT_CALCULATE_OK;
 }
 
 uint16_t getBytsPerSec()

@@ -1,6 +1,9 @@
 #ifndef _Display_H
 #define _Display_H
 
+/******************************************************************************
+ * Include
+ *****************************************************************************/
 #include "../FAT_Parse/BootSector/bootSector.h"
 #include "io.h"
 #include "io2.h"
@@ -35,3 +38,6 @@ void readContentFromClusters(FILE *file, uint32_t startCluster, uint32_t fileSiz
 void fileSystemManager(FILE *file);
 
 #endif
+/******************************************************************************
+ * EOF
+ *****************************************************************************/

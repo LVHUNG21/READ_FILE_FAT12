@@ -1,9 +1,14 @@
+/******************************************************************************
+ * Macro
+ *****************************************************************************/
 #ifndef ROOTDIR_H
 #define ROOTDIR_H
+/******************************************************************************
+ * Include
+ *****************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-
 #include "../Parse_data/FAT_Parse.h"
 
 
@@ -33,9 +38,35 @@ typedef struct DirectoryEntry
   uint32_t file_size;     /* Size of the file in bytes */
 } DirectoryEntry;
 
+/**
+ * @brief 
+ * 
+ * @param file 
+ * @param PtrAddress 
+ * @return uint8_t 
+ */
 uint8_t CountElement(FILE* file,uint32_t PtrAddress);
 
+/**
+ * @brief Create a Array Entry object
+ * 
+ * @param file 
+ * @param PtrAddress 
+ * @return struct DirectoryEntry* 
+ */
 struct DirectoryEntry *CreateArrayEntry(FILE*file,uint32_t PtrAddress);
+/**
+ * @brief 
+ * 
+ * @param file 
+ * @param offset 
+ * @param numEntries 
+ * @param multi 
+ * @return struct DirectoryEntry* 
+ */
 struct DirectoryEntry *readEntriesFromFile(FILE *file, uint32_t offset, int *numEntries,uint8_t multi);
 
 #endif // ROOTDIR_H
+/******************************************************************************
+ * EOF
+ *****************************************************************************/

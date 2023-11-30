@@ -1,8 +1,44 @@
+/******************************************************************************
+ * Include
+ *****************************************************************************/
 #include "file_handling.h"
 
-void updateFAT(FILE *file, uint32_t cluster, uint16_t value);
-int hasEnoughSpaceForEntry(FILE *file, uint32_t numEntriesm, uint32_t address);
-void addEntriesToRootDirectory(FILE *file, DirectoryEntry *newEntry, uint32_t numEntries);
+/******************************************************************************
+ * prototype
+ *****************************************************************************/
+
+/**
+ * @brief Update value in fat table
+ * 
+ * @param file 
+ * @param cluster 
+ * @param value 
+ */
+static void updateFAT(FILE *file, uint32_t cluster, uint16_t value);
+
+/**
+ * @brief check if enough spcae for entry 
+ * 
+ * @param file 
+ * @param numEntriesm 
+ * @param address 
+ * @return int 
+ */
+static int hasEnoughSpaceForEntry(FILE *file, uint32_t numEntriesm, uint32_t address);
+
+/**
+ * @brief add entry to root directory 
+ * 
+ * @param file 
+ * @param newEntry 
+ * @param numEntries 
+ */
+static void addEntriesToRootDirectory(FILE *file, DirectoryEntry *newEntry, uint32_t numEntries);
+
+
+/******************************************************************************
+ * Function
+ *****************************************************************************/
 void getCurrentDateTime(uint16_t *date, uint16_t *time1)
 {
     /* Get the current time in seconds since the epoch */
@@ -18,7 +54,6 @@ void getCurrentDateTime(uint16_t *date, uint16_t *time1)
     *time1 = (currentLocalTime->tm_hour << 11) | (currentLocalTime->tm_min << 5) | (currentLocalTime->tm_sec / 2);
 }
 
-FILE_HANDLING_STATUS DuplicateName(DirectoryEntry *entries, int numEntries, char *newName);
 
 int isDuplicateName(DirectoryEntry *entries, int numEntries, char *newName)
 {
@@ -128,8 +163,7 @@ enum FILE_HANDLING_STATUS deleteFile(FILE *file, char *filename, uint32_t addres
     /* Return the status of the file deletion operation */
     return status;
 }
-
-int hasEnoughSpaceForEntry(FILE *file, uint32_t numEntries, uint32_t rootOffset)
+static int hasEnoughSpaceForEntry(FILE *file, uint32_t numEntries, uint32_t rootOffset)
 {
     /* Set the current offset to the root directory offset */
     uint32_t currentOffset = rootOffset;
@@ -286,7 +320,7 @@ FILE_HANDLING_STATUS createFile(FILE *file, char *filename, uint32_t fileSize, u
 }
 
 /* Add new directory entries to the root directory of a file */
-void addEntriesToRootDirectory(FILE *file, DirectoryEntry *newEntry, uint32_t numEntries)
+static void addEntriesToRootDirectory(FILE *file, DirectoryEntry *newEntry, uint32_t numEntries)
 {
     uint32_t rootOffset = 0;
     /* Function to calculate the root directory address */
@@ -431,7 +465,7 @@ uint32_t allocateCluster(FILE *file, uint32_t numClusters)
     return currentCluster;
 }
 
-void updateFAT(FILE *file, uint32_t cluster, uint16_t value)
+static void updateFAT(FILE *file, uint32_t cluster, uint16_t value)
 {
 
     /* Calculate the offset in the FAT for the specified cluster */
@@ -479,3 +513,6 @@ void updateFAT(FILE *file, uint32_t cluster, uint16_t value)
     /* Write the updated FAT entry */
     fwrite(buffer, 1, 3, file);
 }
+/******************************************************************************
+ * EOF
+ *****************************************************************************/

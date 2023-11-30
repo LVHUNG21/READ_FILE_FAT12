@@ -16,16 +16,16 @@ void removeSpaces(char *str)
 uint32_t printList(struct DirectoryEntry *entries, uint32_t *entryCont, uint32_t address, uint8_t check_null, char currenpath[100])
 {
     system("cls");
-   printf("\n\t\t\t\t\t\t\t\t\t\033[36m*********  FAT12 MANAGEMENT SYSTEM USING C **********\033[0m\n");
+    printf("\n\t\t\t\t\t\t\t\t\t\033[36m*********  FAT12 MANAGEMENT SYSTEM USING C **********\033[0m\n");
     uint32_t option = 0;
     printf("\n");
 
     printf("\n\t\t\t\t\t\t\033[32mPath:%s\033[0m\n", currenpath);
-    printf("\n\t\t\t\t\t\t|====================|====================|====================|====================|==============================|\n");
+    printf("\033[1;36m\n\t\t\t\t\t\t|====================|====================|====================|====================|==============================|\033[0m\n");
     printf("\t\t\t\t\t\t|                    |                    |                    |                    |                              |");
-   printf("\n\t\t\t\t\t\t| \033[33m%-18s\033[0m | \033[33m%-18s\033[0m | \033[33m%-18s\033[0m | \033[33m%-18s\033[0m | \033[33m%-18s\033[0m           |\n", "Index", "Name", "Type", "Size", "Created");
+    printf("\n\t\t\t\t\t\t| \033[33m%-18s\033[0m | \033[33m%-18s\033[0m | \033[33m%-18s\033[0m | \033[33m%-18s\033[0m | \033[33m%-18s\033[0m           |\n", "Index", "Name", "Type", "Size", "Created");
     printf("\t\t\t\t\t\t|                    |                    |                    |                    |                              |");
-    printf("\n\t\t\t\t\t\t|====================|====================|====================|====================|==============================|\n");
+    printf("\033[1;36m\n\t\t\t\t\t\t|====================|====================|====================|====================|==============================|\033[0m\n");
     if (check_null == 'y')
     {
         printf("\t\t\t\t\t\t\t\t\t \033[1;31m ********* THIS FOLDER IS EMPTY (create or back)**********\033[0m\n\n");
@@ -46,30 +46,30 @@ uint32_t printList(struct DirectoryEntry *entries, uint32_t *entryCont, uint32_t
 
             if (entries[i].attributes == 0x10)
             {
-                printf("\t\t\t\t\t\t|                    |                    |                    |                    |                              |");
-                printf("\n\t\t\t\t\t\t| %-5d              | %-19s| %-13s      | %-18s | %04d-%02d-%02d %02d:%02d:%02d          |\n", i + 1, formattedName, (entries[i].attributes & 0x10) ? "Folder" : "File", "", createdDateTime.fields.year + 1980, createdDateTime.fields.month, createdDateTime.fields.day, createdTime.fields.hour, createdTime.fields.minute, createdTime.fields.second);
+                printf("\033[1;36m\t\t\t\t\t\t|                    |                    |                    |                    |                              |\033[0m");
+                printf("\n\t\t\t\t\t\t| \033[1;36m%-5d              | %-19s| %-13s      | %-18s | %04d-%02d-%02d %02d:%02d:%02d          |\033[0m\n", i + 1, formattedName, (entries[i].attributes & 0x10) ? "Folder" : "File", "", createdDateTime.fields.year + 1980, createdDateTime.fields.month, createdDateTime.fields.day, createdTime.fields.hour, createdTime.fields.minute, createdTime.fields.second);
             }
             else
             {
-                printf("\t\t\t\t\t\t|                    |                    |                    |                    |                              |");
-                printf("\n\t\t\t\t\t\t| %-5d              | %-19s| %-13s      | %-19u| %04d-%02d-%02d %02d:%02d:%02d          |\n", i + 1, entries[i].name, (entries[i].attributes & 0x10) ? "Folder" : "File", entries[i].file_size, createdDateTime.fields.year + 1980, createdDateTime.fields.month, createdDateTime.fields.day, createdTime.fields.hour, createdTime.fields.minute, createdTime.fields.second);
+                printf("\033[1;36m\t\t\t\t\t\t|                    |                    |                    |                    |                              |\033[0m");
+                printf("\033[1;36m\n\t\t\t\t\t\t| %-5d              | %-19s| %-13s      | %-19u| %04d-%02d-%02d %02d:%02d:%02d          |\033[0m\n", i + 1, entries[i].name, (entries[i].attributes & 0x10) ? "Folder" : "File", entries[i].file_size, createdDateTime.fields.year + 1980, createdDateTime.fields.month, createdDateTime.fields.day, createdTime.fields.hour, createdTime.fields.minute, createdTime.fields.second);
             }
         }
     }
-    printf("\t\t\t\t\t\t|====================|====================|====================|====================|==============================|\n");
-    printf("\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[%d]:Create File  \n", *(entryCont) + 1);
-    printf("\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[%d]:Create Folder\n", *(entryCont) + 2);
+    printf("\033[1;36m\t\t\t\t\t\t|====================|====================|====================|====================|==============================|\033[0m\n");
+    printf("\033[1;33m\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[%d]:Create File  \n\033[0m", *(entryCont) + 1);
+    printf("\033[1;33m\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[%d]:Create Folder\n\033[0m", *(entryCont) + 2);
     if (entries != NULL)
     {
-        printf("\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[%d]:delete file\n", *(entryCont) + 3);
+        printf("\033[1;33m\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[%d]:delete file\n\033[0m", *(entryCont) + 3);
     }
     if (address != 9728)
     {
-        printf("\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[0].Back to parent folder !!\n");
+        printf("\033[1;33m\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[0].Back to parent folder !!\n\033[0m");
     }
     else
     {
-        printf("\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[0]. Exit\n");
+        printf("\033[1;33m\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[0]. Exit\n\033[0m");
     }
     printf("\n\t\t\t\t\t\tEnter your choice: ");
     fflush(stdin);
@@ -188,7 +188,7 @@ void displayFileContent(uint8_t *data, size_t dataSize)
 }
 void displayAppStarting()
 {
-    loadingBar("jj",'p');
+    loadingBar("jj", 'p');
     printf("\n\t\t\t\t\t\t\t\t\t ");
     char AppStarting[100] = "\033[36m*********  FAT12 MANAGEMENT SYSTEM USING C **********\033[0m\n";
     for (int i = 0; i < strlen(AppStarting); i++)
@@ -219,7 +219,7 @@ void loadingBar(char str[20], uint8_t type)
 
     if (type == 'f')
     {
-        printf("\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+        printf("\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
         printf("\n\n\n\n\t\t\t\t\t\t\t\
            Open folder %s...\n\n",
                str);
@@ -227,7 +227,7 @@ void loadingBar(char str[20], uint8_t type)
     }
     else if (type == 'b')
     {
-        printf("\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t");
+        printf("\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
         printf("\n\n\n\n\t\t\t\t\t\t\t\
            Back to %s...\n\n",
                str);
@@ -235,7 +235,7 @@ void loadingBar(char str[20], uint8_t type)
     }
     else
     {
-        printf("\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t");
+        printf("\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
         printf("\n\n\n\n\t\t\t\t\t\t\t\
            Start the program...\n\n");
         printf("\t\t\t\t\t\t\t\t");
