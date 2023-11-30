@@ -7,7 +7,7 @@ DirectoryEntry* ArrayEntry;
 Root_Status ReadEntry(uint32_t PtrAddress);
 Root_Status CheckEntry(uint32_t PtrAddress);
 uint8_t CountElement(uint32_t PtrAddress);
-
+//aaaa
 /* The function reads an entry at the position passed in */
 Root_Status ReadEntry(uint32_t PtrAddress)
 {
