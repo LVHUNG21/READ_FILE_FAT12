@@ -121,44 +121,4 @@ uint16_t read_fat_entry(FILE* fileptr, uint16_t cluster)
 }
 
 
-void readContentFromClusters(FILE *file, uint32_t startCluster, uint32_t fileSize)
-{
-   
-    uint16_t SecPerClus = getSecPerClus();
-    uint16_t BytePerSec = getBytsPerSec();
-    printf("sec:%d %d ", SecPerClus, BytePerSec);
-    size_t clusterSize = SecPerClus * BytePerSec;
-    uint8_t *buffer = (uint8_t *)malloc(clusterSize);
 
-    uint32_t currentCluster = startCluster;
-    printf("currentcluster %x\n", currentCluster);
-    uint32_t offset = 0;
-
-    while (currentCluster < 0xFF8 && fileSize > 0)
-    {
-         printf("%d:1009",fatentry(file,1008));
-        offset = clusteroffset(currentCluster);
-        printf("clusteooffset:%x", offset);
-
-        fseek(file, offset, SEEK_SET);
-        size_t bytesRead = fread(buffer, 1, clusterSize, file);
-
-        if (bytesRead > fileSize)
-        {
-            bytesRead = fileSize;
-        }
-
-        displayFileContent(buffer, bytesRead);
-
-        fileSize -= bytesRead;
-        offset += bytesRead;
-
-        printf("currentCluster1 :%x\n", currentCluster);
-        uint16_t fatEntry = fatentry(file, currentCluster);
-
-        currentCluster = fatEntry;
-        printf("currentCluster :%x\n", currentCluster);
-    }
-
-    free(buffer);
-}
