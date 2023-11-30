@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-extern FILE *file;
+#include "../Parse_data/FAT_Parse.h"
+
 
 typedef enum
 {
@@ -33,7 +34,7 @@ typedef struct DirectoryEntry
 
 uint8_t CountElement(FILE* file,uint32_t PtrAddress);
 
-DirectoryEntry *CreateArrayEntry(FILE*file,uint32_t PtrAddress);
-DirectoryEntry *readEntriesFromFile(FILE *file, uint32_t offset, int *numEntries);
+struct DirectoryEntry *CreateArrayEntry(FILE*file,uint32_t PtrAddress);
+struct DirectoryEntry *readEntriesFromFile(FILE *file, uint32_t offset, int *numEntries,uint8_t multi);
 
 #endif // ROOTDIR_H
