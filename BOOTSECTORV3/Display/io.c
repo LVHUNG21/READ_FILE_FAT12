@@ -58,7 +58,7 @@ uint32_t printList(struct DirectoryEntry *entries, uint32_t *entryCont, uint32_t
     }
     printf("\033[1;36m\t\t\t\t\t\t|====================|====================|====================|====================|==============================|\033[0m\n");
     printf("\033[1;33m\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[%d]:Create File  \n\033[0m", *(entryCont) + 1);
-    printf("\033[1;33m\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[%d]:Create Folder\n\033[0m", *(entryCont) + 2);
+    printf("\033[1;33m\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[%d]:Create Folder (meta-updating)\n\033[0m", *(entryCont) + 2);
     if (entries != NULL)
     {
         printf("\033[1;33m\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[%d]:delete file\n\033[0m", *(entryCont) + 3);
@@ -79,6 +79,7 @@ uint32_t printList(struct DirectoryEntry *entries, uint32_t *entryCont, uint32_t
     while (inputCount != 1)
     {
         printf("\n\t\t\t\t\t\tInvalid input. Please enter a valid integer: ");
+        /* delete old data */
         while (getchar() != '\n')
             ;
         inputCount = scanf(" %d", &option);
@@ -88,11 +89,28 @@ uint32_t printList(struct DirectoryEntry *entries, uint32_t *entryCont, uint32_t
 uint8_t backOption()
 {
     uint8_t check = 'n';
-    printf("\n\t\t\t\t\t\t\x1b[32mDo you want to display again\x1b[0m\n");
-    scanf("%c", &check);
+    uint8_t exit = 1;
+    fflush(stdin);
+    printf("\n\n\n\t\t\t\t\t\t\033[32mDo you want to display again: \033[0m");
+    // printf("done");
+
+    while (exit == 1)
+    {
+        fflush(stdin);
+        scanf("%c", &check);
+
+        if (check == 'y' || check == 'n')
+        {
+            exit = 0;
+        }
+        else
+        {
+            printf("Invalid input. Please enter 'y' or 'n': ");
+        }
+    }
+
     return check;
 }
-
 void displayOpeningFolder(char *folderName, char *currentPath)
 {
     printf("\nOpening folder: %s\n", folderName);
@@ -156,35 +174,26 @@ int getUserInputFolderIndex()
     scanf("%d", &index);
     return index;
 }
-void displayFileContent(uint8_t *data, size_t dataSize)
+void displayFileContent(uint8_t *data, uint32_t dataSize)
 {
     printf("Hexadecimal :%x\n", dataSize);
 
-    for (size_t i = 0; i < dataSize; ++i)
-    {
-        // printf("%02X ", data[i]);
-    }
-    printf("done");
+    // for (uint32_t i = 0; i < dataSize; ++i)
+    // {
+    //     // printf("%02X ", data[i]);
+    // }
+    // printf("done");
 
     printf("\nASCII \n");
 
-    for (size_t i = 0; i < dataSize; ++i)
+    for (uint32_t i = 0; i < dataSize; ++i)
     {
 
         char character = (char)data[i];
-
-        if (character < 32 || character > 126)
-        {
-
-            printf(".");
-        }
-        else
-        {
-            printf("%c", character);
-        }
+        printf("%c", character);
     }
 
-    printf("\n");
+    printf("\n\n\n");
 }
 void displayAppStarting()
 {
@@ -208,7 +217,7 @@ void updateCurrentPath(char *currentPath, char *formattedName)
 }
 void getDataFromUser(uint8_t *buffer)
 {
-    printf("\t\t\t\t\t\tPlease enter content file:\n");
+    printf("\n\n\t\t\t\t\t\tPlease enter content file:\n");
     scanf("%s", (char *)buffer);
 }
 void loadingBar(char str[20], uint8_t type)

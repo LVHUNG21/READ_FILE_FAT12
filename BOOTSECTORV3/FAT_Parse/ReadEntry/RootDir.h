@@ -26,7 +26,7 @@ typedef enum
   ENTRY_DELETED,
 } Root_Status;
 
-typedef struct DirectoryEntry
+typedef struct __attribute__((packed)) DirectoryEntry
 {
   uint8_t name[8];           /* Space padded filename ([0] = E5h if deleted, 05h if pending delete) */
   char ext[3];            /* File extension */
@@ -39,32 +39,33 @@ typedef struct DirectoryEntry
 } DirectoryEntry;
 
 /**
- * @brief 
- * 
- * @param file 
- * @param PtrAddress 
- * @return uint8_t 
+ * @brief                Counts the number of elements.
+ *
+ * @param[in] file       A pointer to a FILE object.
+ * @param[in] PtrAddress The address of the pointer.
+ * @return               The count of elements as a uint8_t value.
  */
-uint8_t CountElement(FILE* file,uint32_t PtrAddress);
+uint8_t CountElement(FILE* file, uint32_t PtrAddress);
 
 /**
- * @brief Create a Array Entry object
- * 
- * @param file 
- * @param PtrAddress 
- * @return struct DirectoryEntry* 
+ * @brief                Creates an array entry.
+ *
+ * @param[in] file       A pointer to a FILE object.
+ * @param[in] PtrAddress The address of the pointer.
+ * @return               A pointer to a DirectoryEntry structure.
  */
-struct DirectoryEntry *CreateArrayEntry(FILE*file,uint32_t PtrAddress);
+struct DirectoryEntry *CreateArrayEntry(FILE* file, uint32_t PtrAddress);
+
 /**
- * @brief 
- * 
- * @param file 
- * @param offset 
- * @param numEntries 
- * @param multi 
- * @return struct DirectoryEntry* 
+ * @brief Reads all entries from a file and stores them in an array.
+ *
+ * @param[in] file       A pointer to a FILE object.
+ * @param[in] offset     The offset within the file to start reading entries.
+ * @param[inout] numEntries A pointer to an integer to store the number of entries read.
+ * @param[in] multi      A flag indicating if multiple entries should be read.
+ * @return           A pointer to a DirectoryEntry structure representing the array of entries.
  */
-struct DirectoryEntry *readEntriesFromFile(FILE *file, uint32_t offset, int *numEntries,uint8_t multi);
+struct DirectoryEntry *readEntriesFromFile(FILE *file, uint32_t offset, int *numEntries, uint8_t multi);
 
 #endif // ROOTDIR_H
 /******************************************************************************
