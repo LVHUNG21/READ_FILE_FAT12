@@ -92,7 +92,6 @@ uint8_t backOption()
     uint8_t exit = 1;
     fflush(stdin);
     printf("\n\n\n\t\t\t\t\t\t\033[32mDo you want to display again: \033[0m");
-    // printf("done");
 
     while (exit == 1)
     {
@@ -126,7 +125,6 @@ void displayOpeningFolder(char *folderName, char *currentPath)
 void displayOpeningFile(char *fileName, char *currentPath)
 {
     printf("\nOpening file: %s\n", fileName);
-    // Add any additional display logic here
 }
 
 void displayInvalidChoice()
@@ -178,11 +176,6 @@ void displayFileContent(uint8_t *data, uint32_t dataSize)
 {
     printf("Hexadecimal :%x\n", dataSize);
 
-    // for (uint32_t i = 0; i < dataSize; ++i)
-    // {
-    //     // printf("%02X ", data[i]);
-    // }
-    // printf("done");
 
     printf("\nASCII \n");
 
@@ -205,15 +198,12 @@ void displayAppStarting()
         printf("%c", AppStarting[i]);
         Sleep(40);
     }
-    // char AppStarting[100] = "*********  FAT12 MANAGEMENT SYSTEM USING C **********\n";
 }
 void updateCurrentPath(char *currentPath, char *formattedName)
 {
-    // strcat(currentPath, "/");
     strcat(currentPath, formattedName);
     removeSpaces(currentPath);
     printf("\t\t\t\t\t\t\t%s", currentPath);
-    // loadingBar(currentPath, 'f');
 }
 void getDataFromUser(uint8_t *buffer)
 {

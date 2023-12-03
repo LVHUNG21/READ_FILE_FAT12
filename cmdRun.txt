@@ -1,1 +1,1 @@
-gcc -ggdb3 test2.c FAT_Parse/BootSector/bootSector.c FAT_Parse/FileHandling/file_handling.c Display/Display.c FAT_Parse/Parse_data/FAT_Parse.c FAT_Parse/ReadEntry/RootDir.c .\Display\io.c .\Display\io2.c
+gcc -ggdb3 main.c FAT_Parse/BootSector/bootSector.c FAT_Parse/FileHandling/file_handling.c Display/Display.c FAT_Parse/Parse_data/FAT_Parse.c FAT_Parse/ReadEntry/RootDir.c .\Display\io.c .\Display\io2.c  
