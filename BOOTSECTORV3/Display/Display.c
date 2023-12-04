@@ -1,6 +1,9 @@
+
+/******************************************************************************
+ * Include
+ *****************************************************************************/
 #include "Display.h"
 
-// #include "FAT_Parse/BootSector/bootSector.h"
 #include <time.h>
 
 #define TOTAL_CLUSTER 1200
@@ -8,81 +11,57 @@
 #define ANSI_COLOR_RED "\x1b[34m"
 #define ANSI_COLOR_RESET "\x1b[0m"
 
-ListNode *addNode1(ListNode *head, uint32_t address)
-{
-    /* Allocate memory for a new ListNode */
-    ListNode *newNode = (ListNode *)malloc(sizeof(ListNode));
+/******************************************************************************
+ * Prototypes
+ *****************************************************************************/
+/**
+ * @brief     Free Linkerlist after exit
+ * 
+ * @param[in] head 
+ */
+static void freeLitsNodes(ListNode *head);
 
-    /* Check if memory allocation was successful */
-    if (newNode == NULL)
-    {
-        /* If memory allocation failed, set newNode to NULL
-         * to indicate the failure. */
-        newNode = NULL;
-    }
+/**
+ * @brief     check invalid entry 
+ * 
+ * @param[in] entry 
+ * @return    result invaild or not 
+ */
+static int isValidFileEntry(DirectoryEntry *entry);
 
-    /* Assign the address value to the newNode */
-    newNode->address = address;
+/**
+ * @brief Handle option zero from user
+ * 
+ * @param[inout] head 
+ * @param[in]    currentPath 
+ * @param[inout] exit 
+ * @param[in]    current 
+ */
+static void handleOptionZr(struct ListNode **head, char *currentPath, uint8_t *exit, struct ListNode *current);
 
-    /* Set the next pointer of the newNode to the current head */
-    newNode->next = head;
+/**
+ * @brief     add element to linkerlist 
+ * 
+ * @param[in] head 
+ * @param[in] address 
+ * @return    Head node  
+ */
+static ListNode *addNode1(ListNode *head, uint32_t address);
 
-    /* Return the newNode as the new head of the linked list */
-    return newNode;
-};
-struct ListNode *deleteNode(struct ListNode *head, uint32_t addressToDelete)
-{
-    /* If the linked list is empty, return NULL */
-    if (head == NULL)
-    {
-        return NULL;
-    }
+/**
+ * @brief     Delete Node and assign head equal next 
+ * 
+ * @param[in] head 
+ * @param[in] addressToDelete 
+ * @return    Head node 
+ */
+struct ListNode *deleteNode(struct ListNode *head, uint32_t addressToDelete);
 
-    /* Store the next node after the head as the new head */
-    struct ListNode *newHead = head->next;
 
-    /* Free the memory occupied by the current head */
-    free(head);
 
-    /* Return the new head of the linked list */
-    return newHead;
-}
-int isValidFileEntry(DirectoryEntry *entry)
-{
-    /* Check if the first character of the entry's name is not a null character (0x00),
-     * not a deleted file marker (0xE5), and the lower 4 bits of the attributes field are 0. */
-    return (entry->name[0] != 0x00 && entry->name[0] != 0xE5 && (entry->attributes & 0x0F) == 0x00);
-}
-
-void handleOptionZr(struct ListNode **head, char *currentPath, uint8_t *exit, struct ListNode *current)
-{
-    /* Check if the address of the current node is 9728 */
-    if (current->address == 9728)
-    {
-        /* Set the exit flag to 1 */
-        *exit = 1;
-    }
-    else
-    {
-        /* Delete the current node from the linked list */
-        *head = deleteNode(*head, current->address);
-
-        /* Find the last occurrence of '/' character in currentPath */
-        char *last = strrchr(currentPath, '/');
-        if (last != NULL)
-        {
-            /* Set the last '/' character to null character ('\0') */
-            *last = '\0';
-        }
-
-        /* Remove any spaces from currentPath */
-        removeSpaces(currentPath);
-
-        /* Display a loading bar with the updated currentPath */
-        loadingBar(currentPath, 'b');
-    }
-}
-
+/******************************************************************************
+ * Function
+ *****************************************************************************/
 void fileSystemManager(FILE *file)
 {
     /* local variable */
@@ -201,6 +180,7 @@ void fileSystemManager(FILE *file)
             displayInvalidChoice();
         }
     } while (option != 0 || exit == 0);
+    freeLitsNodes(head);
 }
 
 void readContentAndDisplay(FILE *file, uint32_t startCluster, uint32_t fileSize, char path[100])
@@ -213,10 +193,7 @@ void readContentAndDisplay(FILE *file, uint32_t startCluster, uint32_t fileSize,
         uint32_t offset = clusteroffset(startCluster);
 
         fseek(file, offset, SEEK_SET);
-        if (1)
-        {
-            readContentFromClusters(file, startCluster, fileSize);
-        }
+        readContentFromClusters(file, startCluster, fileSize);
         check = backOption();
 
     } while (check != 'n');
@@ -257,3 +234,92 @@ void readContentFromClusters(FILE *file, uint32_t startCluster, uint32_t fileSiz
 
     free(buffer);
 }
+static void freeLitsNodes(ListNode *head)
+{
+    struct ListNode *current = head;
+    struct ListNode *next;
+
+    while (current != NULL)
+    {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+}
+static void handleOptionZr(struct ListNode **head, char *currentPath, uint8_t *exit, struct ListNode *current)
+{
+    /* Check if the address of the current node is 9728 */
+    if (current->address == 9728)
+    {
+        /* Set the exit flag to 1 */
+        *exit = 1;
+    }
+    else
+    {
+        /* Delete the current node from the linked list */
+        *head = deleteNode(*head, current->address);
+
+        /* Find the last occurrence of '/' character in currentPath */
+        char *last = strrchr(currentPath, '/');
+        if (last != NULL)
+        {
+            /* Set the last '/' character to null character ('\0') */
+            *last = '\0';
+        }
+
+        /* Remove any spaces from currentPath */
+        removeSpaces(currentPath);
+
+        /* Display a loading bar with the updated currentPath */
+        loadingBar(currentPath, 'b');
+    }
+}
+static int isValidFileEntry(DirectoryEntry *entry)
+{
+    /* Check if the first character of the entry's name is not a null character (0x00),
+     * not a deleted file marker (0xE5), and the lower 4 bits of the attributes field are 0. */
+    return (entry->name[0] != 0x00 && entry->name[0] != 0xE5 && (entry->attributes & 0x0F) == 0x00);
+}
+static ListNode *addNode1(ListNode *head, uint32_t address)
+{
+    /* Allocate memory for a new ListNode */
+    ListNode *newNode = (ListNode *)malloc(sizeof(ListNode));
+
+    /* Check if memory allocation was successful */
+    if (newNode == NULL)
+    {
+        /* If memory allocation failed, set newNode to NULL
+         * to indicate the failure. */
+        newNode = NULL;
+    }
+
+    /* Assign the address value to the newNode */
+    newNode->address = address;
+
+    /* Set the next pointer of the newNode to the current head */
+    newNode->next = head;
+
+    /* Return the newNode as the new head of the linked list */
+    return newNode;
+};
+struct ListNode *deleteNode(struct ListNode *head, uint32_t addressToDelete)
+{
+    /* If the linked list is empty, return NULL */
+    if (head == NULL)
+    {
+        return NULL;
+    }
+
+    /* Store the next node after the head as the new head */
+    struct ListNode *newHead = head->next;
+
+    /* Free the memory occupied by the current head */
+    free(head);
+
+    /* Return the new head of the linked list */
+    return newHead;
+}
+
+/******************************************************************************
+ * EOF
+ *****************************************************************************/

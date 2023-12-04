@@ -26,20 +26,9 @@ int main()
         printf("Error opening file");
         return 1;
     }
-    struct ListNode *head = NULL;
 
     fileSystemManager(file);
-
-    /* free linker list after end of program */
-    struct ListNode *current = head;
-    struct ListNode *next;
-    while (current != NULL)
-    {
-        next = current->next;
-        free(current);
-        current = next;
-    }
-
+ 
     fclose(file);
 
     return 0;
